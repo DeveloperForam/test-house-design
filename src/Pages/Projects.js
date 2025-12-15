@@ -11,7 +11,7 @@ export default function Projects() {
 
   const fetchProjects = async () => {
     const res = await api.get("/");
-    setProjects(res.data);
+    setProjects(res.data.data);
   };
 
   const handleSubmit = async (e) => {

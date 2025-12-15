@@ -1,45 +1,61 @@
 .house-container {
-  width: 90%;
-  max-width: 800px;
-  margin: auto;
-  padding: 20px 0;
-  font-family: Arial, sans-serif;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.title {
+.house-container h1 {
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 28px;
+  margin-bottom: 20px;
   color: #333;
 }
 
-.dropdown-container {
-  margin-bottom: 20px;
-}
-
-.dropdown-container select {
+.house-container select {
   width: 100%;
+  max-width: 400px;
   padding: 10px;
-  border: 1px solid #999;
-  border-radius: 6px;
   font-size: 16px;
-  margin-top: 5px;
-}
-
-.details-box {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
+  margin: 0 auto 25px;
+  display: block;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.project-title {
-  margin-bottom: 15px;
-  color: #0077cc;
+/* Table */
+.house-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.loading {
-  font-size: 18px;
-  color: #ff6600;
+.house-table th,
+.house-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.house-table th {
+  background-color: #4a90e2;
+  color: #fff;
+  font-weight: bold;
+}
+
+.house-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.house-table tr:hover {
+  background-color: #e6f0ff;
+}
+
+.house-table td:last-child {
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+p {
+  text-align: center;
+  color: #666;
 }
