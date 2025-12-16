@@ -17,8 +17,8 @@ export default function App() {
         return <Projects />;
       case "houses":
         return <Houses />;
-      default:
-        return <Dashboard />;
+      // default:
+        // return <Dashboard />;
     }
   };
 

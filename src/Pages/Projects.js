@@ -98,7 +98,7 @@ export default function Projects() {
               <input
                 type="number"
                 placeholder="Square Feet"
-                value={form.squareFeet || ""}
+                value={form.squareFeet }
                 onChange={(e) =>
                   setForm({ ...form, squareFeet: Number(e.target.value) })
                 }
@@ -108,7 +108,7 @@ export default function Projects() {
                 type="number"
                 placeholder="Per House Cost"
                 required
-                value={form.perHouseCost || ""}
+                value={form.perHouseCost }
                 onChange={(e) =>
                   setForm({ ...form, perHouseCost: Number(e.target.value) })
                 }
@@ -188,6 +188,7 @@ export default function Projects() {
               <th>ID</th>
               <th>Project</th>
               <th>Type</th>
+              <th>Square Feet</th>
               <th>Location</th>
               <th>Actions</th>
             </tr>
@@ -199,6 +200,7 @@ export default function Projects() {
                 <td>{index + 1}</td>
                 <td>{p.projectName}</td>
                 <td>{p.projectType}</td>
+                <td>{p.squareFeet}</td>
                 <td>{p.location}</td>
                 <td>
                   <button onClick={() => setShowDetails(p)}>👁 View</button>

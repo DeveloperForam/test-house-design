@@ -1,23 +1,38 @@
 import { useEffect, useState } from "react";
-import api from "../api"; 
+import api from "../api";
 import "./House.css";
 
 const ITEMS_PER_PAGE = 20;
+const STATUS_OPTIONS = ["available", "booked", "sold"];
 
 export default function Houses() {
   const [projects, setProjects] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [houses, setHouses] = useState([]);
   const [loading, setLoading] = useState(false);
-  
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    api.get("/")
-      .then((res) => setProjects(res.data.data))
-      .catch(() => alert("Backend error fetching projects"));
-  }, []);
+  // -----------------------------
+  // Fetch projects
+  // -----------------------------
+ useEffect(() => {
+  api.get("/")
+    .then((res) => {
+      const list = Array.isArray(res?.data?.data)
+        ? res.data.data
+        : [];
+      setProjects(list);
+    })
+    .catch(() => {
+      setProjects([]);
+      alert("Backend error fetching projects");
+    });
+}, []);
 
+
+  // -----------------------------
+  // Fetch houses
+  // -----------------------------
   const handleChange = async (id) => {
     setSelectedId(id);
     setCurrentPage(1);
@@ -29,77 +44,57 @@ export default function Houses() {
 
     try {
       setLoading(true);
-      // Fetches ALL houses for the selected project
-      const res = await api.get(`/${id}/houses`);
-      setHouses(res.data.data);
+      const res = await api.get(`/houses/${id}`);
+      setHouses(Array.isArray(res?.data?.data) ? res.data.data : []);
     } catch {
+      setHouses([]);
       alert("Failed to load houses");
     } finally {
       setLoading(false);
     }
   };
 
+  // -----------------------------
+  // Update house status
+  // -----------------------------
+  const updateStatus = async (houseNumber, status) => {
+    try {
+      await api.patch(`/houses/${selectedId}/${houseNumber}`, { status });
+
+      // update UI without refetch
+      setHouses((prev) =>
+        prev.map((h) =>
+          h.houseNumber === houseNumber ? { ...h, status } : h
+        )
+      );
+    } catch {
+      alert("Failed to update status");
+    }
+  };
+
+  // -----------------------------
+  // Pagination logic
+  // -----------------------------
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-
   const currentHouses = houses.slice(indexOfFirstItem, indexOfLastItem);
-  
   const totalPages = Math.ceil(houses.length / ITEMS_PER_PAGE);
 
-  const paginate = (pageNumber) => {
-    if (pageNumber > 0 && pageNumber <= totalPages) {
-        setCurrentPage(pageNumber);
-
-        window.scrollTo(0, 0);
+  const paginate = (page) => {
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo(0, 0);
     }
-
-  };
-  
-  const PaginationControls = () => {
-    if (totalPages <= 1) return null; 
-
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(i);
-    }
-
-    return (
-      <nav className="pagination-nav">
-        <ul className="pagination-list">
-          <li 
-            className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}
-            onClick={() => currentPage > 1 && paginate(currentPage - 1)}
-          >
-            <a className="page-link" href="#!">Previous</a>
-          </li>
-
-          {pageNumbers.map(number => (
-            (number === 1 || number === totalPages || (number >= currentPage - 2 && number <= currentPage + 2)) && (
-              <li 
-                key={number} 
-                className={`page-item ${currentPage === number ? 'active' : ''}`}
-                onClick={() => paginate(number)}
-              >
-                <a className="page-link" href="#!">{number}</a>
-              </li>
-            )
-          ))}
-
-          <li 
-            className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}
-            onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
-          >
-            <a className="page-link" href="#!">Next</a>
-          </li>
-        </ul>
-      </nav>
-    );
   };
 
+  // -----------------------------
+  // JSX
+  // -----------------------------
   return (
     <div className="house-container">
       <h1>Houses</h1>
 
+      {/* Project dropdown */}
       <select
         className="project-select"
         value={selectedId}
@@ -115,7 +110,7 @@ export default function Houses() {
 
       {loading && <p className="loading">Loading...</p>}
 
-      {houses.length > 0 && (
+      {currentHouses.length > 0 && (
         <>
           <table className="house-table">
             <thead>
@@ -126,39 +121,74 @@ export default function Houses() {
                 <th>Project Type</th>
                 <th>Square Feet</th>
                 <th>Price (₹)</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
-            <tbody>
-              {currentHouses.map((h, i) => {
-                const sNo = indexOfFirstItem + i + 1;
 
-                return (
-                  <tr key={h.id || i}> 
-                    <td>{sNo}</td> 
-                    <td>{h.projectName}</td>
-                    <td>{h.houseNumber}</td>
-                    <td>{h.projectType}</td>
-                    <td>{h.squareFeet}</td>
-                    <td>₹{h.price.toLocaleString()}</td>
-                  </tr>
-                );
-              })}
+            <tbody>
+              {currentHouses.map((h, i) => (
+                <tr key={`${h.houseNumber}-${i}`}>
+                  <td data-label="S. No.">{indexOfFirstItem + i + 1}</td>
+                  <td data-label="Project Name">{h.projectName}</td>
+                  <td data-label="House No">{h.houseNumber}</td>
+                  <td data-label="Project Type">{h.projectType}</td>
+                  <td data-label="Square Feet">{h.squareFeet}</td>
+                  <td data-label="Price">₹{Number(h.price || 0).toLocaleString()}</td>
+                  <td data-label="Status" className={`status ${h.status}`}>
+                    {h.status}
+                  </td>
+                  <td data-label="Action">
+                    <select
+                      value={h.status}
+                      onChange={(e) =>
+                        updateStatus(h.houseNumber, e.target.value)
+                      }
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+
+                </tr>
+              ))}
             </tbody>
           </table>
-          
-          <PaginationControls />
-          
-          <p className="pagination-status">
-            Showing houses {indexOfFirstItem + 1} to {indexOfLastItem > houses.length ? houses.length : indexOfLastItem} of {houses.length} total.
-          </p>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => paginate(currentPage - 1)}
+              >
+                Prev
+              </button>
+
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => paginate(currentPage + 1)}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </>
       )}
 
       {!loading && houses.length === 0 && selectedId && (
-        <p className="no-data">No houses found for this project.</p>
+        <p className="no-data">No houses found</p>
       )}
-      {!loading && houses.length === 0 && !selectedId && (
-        <p className="no-data">Please select a project to view houses.</p>
+
+      {!loading && !selectedId && (
+        <p className="no-data">Please select a project</p>
       )}
     </div>
   );
