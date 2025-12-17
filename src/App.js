@@ -4,6 +4,7 @@ import Navbar from "./components/navbar";
 import Projects from "./Pages/Projects";
 import Dashboard from "./Pages/Dashboard";
 import Houses from "./Pages/House";
+import Services from "./Pages/Services";
 import "./styles.css";
 
 export default function App() {
@@ -17,6 +18,8 @@ export default function App() {
         return <Projects />;
       case "houses":
         return <Houses />;
+      case "services":
+        return <Services />;
       // default:
         // return <Dashboard />;
     }

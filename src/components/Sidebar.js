@@ -6,6 +6,7 @@ export default function Sidebar({ setPage }) {
         <li onClick={() => setPage("dashboard")}>Dashboard</li>
         <li onClick={() => setPage("projects")}>Projects</li>
         <li onClick={() => setPage("houses")}>Houses</li>
+        <li onClick={() => setPage("services")}>Services</li> {/* ✅ NEW */}
       </ul>
     </div>
   );
