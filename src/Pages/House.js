@@ -16,7 +16,7 @@ export default function Houses() {
   // Fetch projects
   // -----------------------------
  useEffect(() => {
-  api.get("/")
+  api.get("/lily/")
     .then((res) => {
       const list = Array.isArray(res?.data?.data)
         ? res.data.data
@@ -44,7 +44,7 @@ export default function Houses() {
 
     try {
       setLoading(true);
-      const res = await api.get(`/houses/${id}`);
+      const res = await api.get(`/lily/houses/${id}`);
       setHouses(Array.isArray(res?.data?.data) ? res.data.data : []);
     } catch {
       setHouses([]);
@@ -59,7 +59,7 @@ export default function Houses() {
   // -----------------------------
   const updateStatus = async (houseNumber, status) => {
     try {
-      await api.patch(`/houses/${selectedId}/${houseNumber}`, { status });
+      await api.patch(`/lily/${selectedId}/${houseNumber}`, { status });
 
       // update UI without refetch
       setHouses((prev) =>

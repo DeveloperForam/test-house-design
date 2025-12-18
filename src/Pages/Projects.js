@@ -10,7 +10,7 @@ export default function Projects() {
   const [showDetails, setShowDetails] = useState(null);
 
   const fetchProjects = async () => {
-    const res = await api.get("/");
+    const res = await api.get("/lily/");
     setProjects(res.data.data);
   };
 
@@ -18,10 +18,10 @@ export default function Projects() {
     e.preventDefault();
 
     if (editingId) {
-      await api.put(`/${editingId}`, form);
+      await api.put(`/lily/${editingId}`, form);
       setEditingId(null);
     } else {
-      await api.post("/", form);
+      await api.post("/lily/", form);
     }
 
     fetchProjects();
@@ -32,7 +32,7 @@ export default function Projects() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
-      await api.delete(`/${id}`);
+      await api.delete(`/lily/${id}`);
       fetchProjects();
     }
   };
