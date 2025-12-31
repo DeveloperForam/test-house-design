@@ -1,175 +1,214 @@
-/* House.css - Professional Design */
+/* =====================================
+   HOUSE / CREATE BOOKING – FULL CSS
+===================================== */
 
-/* Global Container */
-.house-container {
-  max-width: 1280px;
-  margin: 40px auto;
+.booking-container {
   padding: 30px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  font-family: 'Roboto', sans-serif;
-  color: #333333;
+  background: #f5f7fb;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
-.house-container h1 {
+/* =====================================
+   PAGE TITLES
+===================================== */
+
+.page-title {
   text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1f3a5f;
   margin-bottom: 30px;
-  font-size: 28px;
+}
+
+/* =====================================
+   FORM CARD
+===================================== */
+
+.booking-form {
+  max-width: 1100px;
+  margin: 0 auto 50px auto;
+  background: #ffffff;
+  padding: 32px 36px;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+
+  display: grid;
+  grid-template-columns: 180px 1fr 180px 1fr;
+  column-gap: 26px;
+  row-gap: 22px;
+}
+
+/* =====================================
+   LABELS
+===================================== */
+
+.booking-form label {
+  font-size: 15px;
   font-weight: 600;
-  color: #1f2937;
+  color: #0f2a44;
+  align-self: center;
 }
 
-/* Project Dropdown */
-.project-select {
-  display: block;
-  width: 280px;
-  margin: 0 auto 25px auto;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 16px;
-  background-color: #f9fafb;
-  transition: all 0.2s ease;
-}
+/* =====================================
+   INPUTS & SELECTS
+===================================== */
 
-.project-select:focus {
-  border-color: #2563eb;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-}
-
-/* Loading & No Data */
-.loading,
-.no-data {
-  text-align: center;
-  font-size: 16px;
-  color: #6b7280;
-  margin: 20px 0;
-}
-
-/* House Table */
-.house-table {
+.booking-form input,
+.booking-form select {
   width: 100%;
-  border-collapse: collapse;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
 }
 
-.house-table th,
-.house-table td {
-  padding: 14px 12px;
-  text-align: center;
+.booking-form input::placeholder {
+  color: #94a3b8;
 }
 
-.house-table th {
-  background-color: #2563eb;
-  color: #ffffff;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 14px;
-}
-
-.house-table tr:nth-child(even) {
-  background-color: #f3f4f6;
-}
-
-.house-table tr:hover {
-  background-color: #e0f2fe;
-}
-
-/* Status Badges */
-.status {
-  padding: 6px 12px;
-  /* border-radius: 20px; */
-  font-weight: 500;
-  font-size: 16px;
-  text-transform: capitalize;
-}
-
-.status.available {
- color: #10b981; /* Green */
-}
-
-.status.booked {
- color: #f59e0b; /* Amber */
-}
-
-.status.sold {
-  color: #ef4444; 
-}
-
-/* Action Dropdown */
-.house-table select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
+.booking-form select {
   cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #f9fafb;
-  text-transform: capitalize;
-
 }
 
-.house-table select:focus {
-  border-color: #2563eb;
+/* Focus */
+.booking-form input:focus,
+.booking-form select:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.pagination button {
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: none;
-  background-color: #2563eb;
-  color: #ffffff;
-  font-weight: 500;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.pagination button:hover:not(:disabled) {
-  background-color: #1d4ed8;
-}
-
-.pagination button:disabled {
-  background-color: #d1d5db;
+/* Readonly fields */
+.booking-form input[readonly] {
+  background: #f1f5f9;
+  color: #64748b;
   cursor: not-allowed;
 }
 
-.pagination span {
-  font-size: 14px;
-  font-weight: 500;
-  color: #374151;
+/* =====================================
+   SUBMIT BUTTON
+===================================== */
+
+.booking-form button {
+  grid-column: span 4;
+  margin-top: 12px;
+  height: 54px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
-/* Responsive Table Scroll */
+.booking-form button:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.35);
+}
+
+.booking-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =====================================
+   BOOKING LIST TABLE
+===================================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+thead {
+  background: #1e3a5f;
+}
+
+thead th {
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+}
+
+tbody td {
+  padding: 13px;
+  font-size: 14px;
+  color: #334155;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* =====================================
+   PAYMENT BADGES
+===================================== */
+
+.badge {
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+    color: #0369a1;
+
+}
+
+/* =====================================
+   BOOKING HISTORY BUTTON
+===================================== */
+
+.history-btn {
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  background: #2563eb;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.history-btn:hover {
+  background: #1e40af;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
 @media (max-width: 1024px) {
-  .house-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+  .booking-form {
+    grid-template-columns: 140px 1fr;
+  }
+
+  .booking-form button {
+    grid-column: span 2;
   }
 }
 
 @media (max-width: 640px) {
-  .house-container h1 {
-    font-size: 24px;
+  .booking-form {
+    grid-template-columns: 1fr;
   }
 
-  .project-select {
-    width: 100%;
+  .booking-form label {
+    margin-bottom: -8px;
+  }
+
+  .booking-form button {
+    grid-column: span 1;
   }
 }

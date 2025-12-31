@@ -13,9 +13,9 @@ export default function Sidebar() {
 
       {/* Menu */}
       <nav className="sidebar-menu">
-        <NavLink to="/">Dashboard</NavLink>
+        <NavLink to="/dashboard">Dashboard</NavLink>
         <NavLink to="/projects">Projects</NavLink>
-        <NavLink to="/houses">Houses</NavLink>
+        <NavLink to="/bookings">Bookings</NavLink>
         <NavLink to="/services">Services</NavLink>
       </nav>
     </div>

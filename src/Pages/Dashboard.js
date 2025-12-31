@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import "./Dashboard.css";
 
+
 export default function Dashboard() {
   const [totalProjects, setTotalProjects] = useState(0);
   const [houseCount, setHouseCount] = useState({

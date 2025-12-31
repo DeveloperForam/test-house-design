@@ -1,389 +1,243 @@
-/* Main container */
-div {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* ===============================
+   PROJECTS PAGE – PROFESSIONAL UI
+================================ */
+
+.projects-page {
+  padding: 24px;
+  background: #f8fafc;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
 }
 
-/* Table Container */
-.table-container {
-  margin: 20px;
-  overflow-x: auto;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-  background: white;
-  text-transform: capitalize;
+/* ===============================
+   PRIMARY BUTTONS
+================================ */
 
-}
-
-/* Table Styles */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  /* min-width: 800px; */
-}
-
-table thead {
-  background-color: #2c3e50;
-  color: white;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-table th {
-  padding: 16px 12px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid #3498db;
-}
-
-table tbody tr {
-  border-bottom: 1px solid #eee;
-  transition: all 0.3s ease;
-  animation: fadeIn 0.5s ease-out;
-}
-
-table tbody tr:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-table tbody tr:nth-child(even) {
-  background-color: #f8f9fa;
-}
-
-table tbody tr:nth-child(even):hover {
-  background-color: #e9ecef;
-}
-
-table td {
-  padding: 14px 12px;
-  color: #333;
-  font-size: 15px;
-  vertical-align: middle;
-}
-
-/* Add New Project Button */
 .btn-submit {
-  background: linear-gradient(135deg, #2c3e50, #273746);
-  color: white;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
   border: none;
-  padding: 12px 24px;
+  padding: 10px 18px;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
-  margin: 20px;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .btn-submit:hover {
-  background: linear-gradient(135deg, #2c3e50, #2c3e50);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
-}
-
-.btn-submit:active {
-  transform: translateY(0);
-}
-
-/* Action Buttons in Table */
-table td button {
-  padding: 8px 16px;
-  margin: 4px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  min-width: 80px;
-}
-
-table td button:first-child {
-  background-color: #3498db;
-  color: white;
-}
-
-table td button:nth-child(2) {
-  background-color: #f39c12;
-  color: white;
-}
-
-table td button:last-child {
-  background-color: #e74c3c;
-  color: white;
-}
-
-table td button:hover {
-  opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
 }
 
-table td button:active {
-  transform: translateY(0);
+.btn-close {
+  background: #e5e7eb;
+  color: #111827;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-/* Modal Overlay */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* ===============================
+   TABLE CONTAINER
+================================ */
+
+.table-container {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.table-container table {
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s ease-out;
-  backdrop-filter: blur(5px);
+  border-collapse: collapse;
 }
 
-/* Modal Content */
-.modal-content {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  position: relative;
-  animation: slideUp 0.4s ease-out;
-  max-height: 90vh;
-  overflow-y: auto;
-}
+/* ===============================
+   TABLE HEADER
+================================ */
 
-.modal-content h2 {
-  color: #2c3e50;
-  margin-bottom: 20px;
+.table-container thead th {
+  padding: 14px 12px;
+  font-size: 14px;
   font-weight: 600;
+  color: #1f2937;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* ===============================
+   TABLE BODY
+================================ */
+
+.table-container tbody td {
+  padding: 12px;
+  font-size: 14px;
+  color: #374151;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: middle;
+}
+
+.table-container tbody tr:hover {
+  background: #f9fafb;
+}
+
+/* ===============================
+   COLUMN ALIGNMENT
+================================ */
+
+/* No. */
+.table-container th:nth-child(1),
+.table-container td:nth-child(1) {
+  text-align: center;
+  width: 60px;
+}
+
+/* Project Name */
+.table-container th:nth-child(2),
+.table-container td:nth-child(2) {
+  text-align: left;
+  font-weight: 500;
+}
+
+/* Type */
+.table-container th:nth-child(3),
+.table-container td:nth-child(3) {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+/* Location */
+.table-container th:nth-child(4),
+.table-container td:nth-child(4) {
+  text-align: left;
+}
+
+/* Plots */
+.table-container th:nth-child(5),
+.table-container td:nth-child(5) {
   text-align: center;
 }
 
-.modal-content hr {
-  border: none;
-  height: 2px;
-  background: linear-gradient(90deg, #3498db, transparent);
-  margin: 20px 0;
+/* Actions */
+.table-container th:nth-child(6),
+.table-container td:nth-child(6) {
+  text-align: center;
 }
 
-/* Form Styles */
-form {
+/* ===============================
+   ACTION BUTTONS
+================================ */
+
+.action-cell {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: center;
+  gap: 8px;
 }
 
-input, select {
-  padding: 12px 16px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  background-color: white;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-}
-
-input:hover, select:hover {
-  border-color: #3498db;
-}
-
-/* Form Submit Button in Modal */
-form .btn-submit {
-  width: 100%;
-  margin-top: 10px;
-  padding: 14px;
-  font-size: 16px;
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-}
-
-form .btn-submit:hover {
-  background: linear-gradient(135deg, #27ae60, #219653);
-}
-
-/* Close Button */
-.btn-close {
-  background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-  color: white;
+.action-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  transition: all 0.25s ease;
+  min-width: 60px;
+}
+
+/* View */
+.action-btn.view {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.action-btn.view:hover {
+  background: #bae6fd;
+}
+
+/* Edit */
+.action-btn.edit {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.action-btn.edit:hover {
+  background: #bfdbfe;
+}
+
+/* Delete */
+.action-btn.delete {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.action-btn.delete:hover {
+  background: #fecaca;
+}
+
+/* ===============================
+   MODAL
+================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: #ffffff;
+  width: 520px;
+  max-width: 95%;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  color: #1f2937;
+}
+
+.modal-content label {
+  display: block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modal-content input,
+.modal-content select {
   width: 100%;
-  margin-top: 10px;
+  padding: 10px 12px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
 }
 
-.btn-close:hover {
-  background: linear-gradient(135deg, #7f8c8d, #6c7a7d);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
 }
 
-/* View Modal Content */
-.modal-content p {
-  margin: 10px 0;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #34495e;
-}
-
-.modal-content p b {
-  color: #2c3e50;
-  font-weight: 600;
-  min-width: 150px;
-  display: inline-block;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInRow {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Scrollbar Styling */
-.modal-content::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.modal-content::-webkit-scrollbar-thumb {
-  background: #3498db;
-  border-radius: 10px;
-}
-
-.modal-content::-webkit-scrollbar-thumb:hover {
-  background: #2980b9;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .table-container {
-    margin: 10px;
-    border-radius: 8px;
-  }
-
-  .btn-submit {
-    width: calc(100% - 40px);
-    margin: 20px;
-    padding: 14px;
-  }
-
-  table {
-    min-width: 600px;
-  }
-
-  .modal-content {
-    width: 95%;
-    padding: 20px;
-    margin: 10px;
-  }
-
-  table td button {
-    padding: 6px 12px;
-    margin: 3px;
-    font-size: 13px;
-    min-width: 70px;
-  }
-
-  .modal-content p b {
-    min-width: 120px;
-    font-size: 14px;
-  }
-
-  .modal-content p {
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .table-container {
-    margin: 5px;
-  }
-
-  .btn-submit {
-    margin: 10px;
-    width: calc(100% - 20px);
-  }
-
-  .modal-content {
-    padding: 15px;
-    margin: 5px;
-  }
-
-  input, select {
-    padding: 10px 14px;
-    font-size: 14px;
-  }
-
-  form {
-    gap: 15px;
-  }
-
-  table td button {
-    padding: 5px 8px;
-    margin: 2px;
-    font-size: 12px;
-    min-width: 60px;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .modal {
-    position: relative;
-    background: none;
-  }
-
-  .modal-content {
-    box-shadow: none;
-    border: 2px solid #000;
-  }
-
-  .btn-submit, .btn-close, table td button {
-    display: none;
-  }
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
