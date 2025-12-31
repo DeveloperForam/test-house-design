@@ -11,17 +11,16 @@ export default function BookingHistory() {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-  amountReceived: "",
-  paymentMethod: "cash",
-  paymentReceivedDate: "",
-  paymentDetails: {},   // ✅ NEW
-});
+    amountReceived: "",
+    paymentMethod: "cash",
+    paymentReceivedDate: "",
+    paymentDetails: {},
+  });
 
   /* ================= LOAD DATA ================= */
   useEffect(() => {
     loadBooking();
     loadHistory();
-    // eslint-disable-next-line
   }, []);
 
   /* ================= LOAD SINGLE BOOKING ================= */
@@ -48,20 +47,9 @@ export default function BookingHistory() {
   };
 
   /* ================= CALCULATIONS ================= */
-  const totalPayment = booking?.totalPayment || 0;
-const advancePayment = booking?.advancePayment || 0;
-
-// Amount left after advance
-const payableAmount = totalPayment - advancePayment;
-
-// Payments done after booking
-const totalPaid = Array.isArray(history)
-  ? history.reduce((sum, p) => sum + Number(p.amountReceived || 0), 0)
-  : 0;
-
-// Final pending
-const pendingAmount = payableAmount - totalPaid;
-
+  const totalAmount = booking?.totalAmount || 0;
+  const advancePayment = booking?.advancePayment || 0;
+  const pendingAmount = booking?.pendingAmount || 0;
 
   /* ================= ADD PAYMENT ================= */
   const addPayment = async (e) => {
@@ -84,6 +72,7 @@ const pendingAmount = payableAmount - totalPaid;
         amountReceived: "",
         paymentMethod: "cash",
         paymentReceivedDate: "",
+        paymentDetails: {},
       });
 
       loadHistory();
@@ -96,38 +85,34 @@ const pendingAmount = payableAmount - totalPaid;
     }
   };
 
-    const formatINR = (value) => {
-  if (value === null || value === undefined || value === "") return "";
-  return new Intl.NumberFormat("en-IN").format(value);
-};
+  const formatINR = (value) => {
+    if (value === null || value === undefined || value === "") return "";
+    return new Intl.NumberFormat("en-IN").format(value);
+  };
 
   /* ================= UI ================= */
   return (
     <div className="booking-container">
       <h2 className="page-title">Booking Payment History</h2>
 
-      {/* ================= SUMMARY ================= */}
-      <div className="summary-box">
-  <div>
-    <b>Total Payment:</b> ₹{totalPayment}
-  </div>
-
-  <div>
-    <b>Booking Amount:</b>{" "}
-    <span style={{ color: "green" }}>₹{formatINR(advancePayment)}</span>
-  </div>
-  <div>
-  <b>Status:</b>{" "}
-  {pendingAmount === 0 ? (
-    <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
-  ) : (
-    <span style={{ color: "red", fontWeight: "bold" }}>
-      ₹{formatINR(pendingAmount)} Pending
-    </span>
-  )}
-</div>
-</div>
-
+      {booking && (
+        <div className="summary-box">
+          <div><b>Project:</b> {booking.projectName || "-"}</div>
+          <div><b>House Number:</b> {booking.houseNumber}</div>
+          <div><b>Total Amount:</b> ₹{formatINR(totalAmount)}</div>
+          <div><b>Booking Amount:</b> ₹{formatINR(advancePayment)}</div>
+          <div>
+            <b>Status:</b>{" "}
+            {pendingAmount === 0 ? (
+              <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
+            ) : (
+              <span style={{ color: "red", fontWeight: "bold" }}>
+                ₹{formatINR(pendingAmount)} Pending
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ================= PAYMENT FORM ================= */}
       {pendingAmount > 0 && (
@@ -137,17 +122,13 @@ const pendingAmount = payableAmount - totalPaid;
             type="number"
             placeholder="Amount Received"
             value={form.amountReceived}
-            onChange={(e) =>
-              setForm({ ...form, amountReceived: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, amountReceived: e.target.value })}
             max={pendingAmount}
           />
 
           <select
             value={form.paymentMethod}
-            onChange={(e) =>
-              setForm({ ...form, paymentMethod: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
           >
             <option value="cash">Cash</option>
             <option value="upi">UPI</option>
@@ -156,96 +137,76 @@ const pendingAmount = payableAmount - totalPaid;
             <option value="card">Card</option>
           </select>
 
-{form.paymentMethod === "upi" && (
-  <input
-    placeholder="UPI Transaction ID"
-    minLength={12}
-    maxLength={18}
-    onChange={(e) =>
-      setForm({
-        ...form,
-        paymentDetails: { upiTxnId: e.target.value },
-      })
-    }
-  />
-)}
+          {/* PAYMENT DETAILS */}
+          {form.paymentMethod === "upi" && (
+            <input
+              placeholder="UPI Transaction ID"
+              minLength={12}
+              maxLength={18}
+              onChange={(e) =>
+                setForm({ ...form, paymentDetails: { upiTxnId: e.target.value } })
+              }
+            />
+          )}
 
-{form.paymentMethod === "bank" && (
-  <>
-    <input
-      placeholder="Bank Name"
-      value={form.paymentDetails?.bankName || ""}
-      onChange={(e) =>
-        setForm({
-          ...form,
-          paymentDetails: {
-            ...form.paymentDetails,
-            bankName: e.target.value,
-          },
-        })
-      }
-    />
+          {form.paymentMethod === "bank" && (
+            <>
+              <input
+                placeholder="Bank Name"
+                value={form.paymentDetails?.bankName || ""}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    paymentDetails: { ...form.paymentDetails, bankName: e.target.value },
+                  })
+                }
+              />
+              <input
+                placeholder="Account Number"
+                value={form.paymentDetails?.accountNo || ""}
+                minLength={14}
+                maxLength={18}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    paymentDetails: { ...form.paymentDetails, accountNo: e.target.value },
+                  })
+                }
+              />
+            </>
+          )}
 
-    <input
-      placeholder="Account Number"
-      value={form.paymentDetails?.accountNo || ""}
-      minLength={14}
-      maxLength={18}
-      onChange={(e) =>
-        setForm({
-          ...form,
-          paymentDetails: {
-            ...form.paymentDetails,
-            accountNo: e.target.value,
-          },
-        })
-      }
-    />
-  </>
-)}
+          {form.paymentMethod === "cheque" && (
+            <input
+              placeholder="Cheque Number"
+              onChange={(e) =>
+                setForm({ ...form, paymentDetails: { chequeNo: e.target.value } })
+              }
+            />
+          )}
 
-
-{form.paymentMethod === "cheque" && (
-  <input
-    placeholder="Cheque Number"
-    onChange={(e) =>
-      setForm({
-        ...form,
-        paymentDetails: { chequeNo: e.target.value },
-      })
-    }
-  />
-)}
-
-{form.paymentMethod === "card" && (
-  <input
-    placeholder="Last 4 digits"
-    maxLength={4}
-    onChange={(e) =>
-      setForm({
-        ...form,
-        paymentDetails: { last4Digits: e.target.value },
-      })
-    }
-  />
-)}
+          {form.paymentMethod === "card" && (
+            <input
+              placeholder="Last 4 digits"
+              maxLength={4}
+              onChange={(e) =>
+                setForm({ ...form, paymentDetails: { last4Digits: e.target.value } })
+              }
+            />
+          )}
 
           <input
             required
             type="date"
             value={form.paymentReceivedDate}
-            onChange={(e) =>
-              setForm({ ...form, paymentReceivedDate: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, paymentReceivedDate: e.target.value })}
           />
 
-          <button disabled={loading}>
-            {loading ? "Saving..." : "Add Payment"}
-          </button>
+          <button disabled={loading}>{loading ? "Saving..." : "Add Payment"}</button>
         </form>
       )}
 
-      {/* ================= HISTORY TABLE ================= */}
+      {/* ================= PAYMENT HISTORY TABLE ================= */}
       <table>
         <thead>
           <tr>
@@ -266,20 +227,20 @@ const pendingAmount = payableAmount - totalPaid;
               const paidTillNow = history
                 .slice(0, index + 1)
                 .reduce((sum, p) => sum + Number(p.amountReceived || 0), 0);
-              const pendingAfter = totalPayment - paidTillNow - advancePayment ;
+              const pendingAfter = totalAmount - advancePayment - paidTillNow;
 
               return (
                 <tr key={h._id}>
                   <td>{new Date(h.paymentReceivedDate).toLocaleDateString()}</td>
                   <td>{h.paymentMethod.toUpperCase()}</td>
                   <td>₹{h.amountReceived}</td>
-<td>
-  {pendingAfter === 0 ? (
-    <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
-  ) : (
-    <>₹{formatINR(pendingAfter)}</>
-  )}
-</td>
+                  <td>
+                    {pendingAfter === 0 ? (
+                      <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
+                    ) : (
+                      <>₹{formatINR(pendingAfter)}</>
+                    )}
+                  </td>
                 </tr>
               );
             })

@@ -118,15 +118,9 @@
   text-align: left;
 }
 
-/* Plots */
+/* Actions */
 .table-container th:nth-child(5),
 .table-container td:nth-child(5) {
-  text-align: center;
-}
-
-/* Actions */
-.table-container th:nth-child(6),
-.table-container td:nth-child(6) {
   text-align: center;
 }
 

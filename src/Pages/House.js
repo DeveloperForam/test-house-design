@@ -19,7 +19,9 @@ export default function Bookings() {
     customerName: "",
     mobileNo: "",
     paymentType: "cash", // cash | bank
-    totalPayment: "",
+    totalSqFeet: "",
+    pricePerSqFeet: "",
+    totalAmount: "",
     advancePayment: "",
     pendingAmount: "",
     bookingDate: today,
@@ -59,14 +61,15 @@ export default function Bookings() {
       ...form,
       projectId: pid,
       houseNumber: "",
-      totalPayment: "",
+      totalSqFeet: "",
+      pricePerSqFeet: "",
+      totalAmount: "",
       advancePayment: "",
       pendingAmount: "",
     });
 
     try {
       const res = await api.get(`/lily/houses/${pid}`);
-      // Only show available houses
       setHouses(res.data.data.filter((h) => h.status === "available"));
     } catch {
       setHouses([]);
@@ -76,13 +79,16 @@ export default function Bookings() {
   /* ================= HOUSE CHANGE ================= */
   const handleHouseChange = (houseNo) => {
     const house = houses.find((h) => h.houseNumber === houseNo);
-    const price = house?.price || 0;
+    const totalSqFeet = house?.totalSqFeet ;
+    const pricePerSqFeet = house?.pricePerSqFeet ;
 
     setForm((prev) => ({
       ...prev,
       houseNumber: houseNo,
-      totalPayment: price,
-      pendingAmount: price - Number(prev.advancePayment || 0),
+      totalSqFeet,
+      pricePerSqFeet,
+      totalAmount: totalSqFeet * pricePerSqFeet,
+      pendingAmount: totalSqFeet * pricePerSqFeet - Number(prev.advancePayment ),
     }));
   };
 
@@ -98,7 +104,9 @@ export default function Bookings() {
         customerName: form.customerName,
         mobileNo: form.mobileNo,
         paymentType: form.paymentType,
-        totalPayment: Number(form.totalPayment),
+        totalSqFeet: Number(form.totalSqFeet),
+        pricePerSqFeet: Number(form.pricePerSqFeet),
+        totalAmount: Number(form.totalAmount),
         advancePayment: Number(form.advancePayment),
         pendingAmount: Number(form.pendingAmount),
       });
@@ -111,7 +119,9 @@ export default function Bookings() {
         customerName: "",
         mobileNo: "",
         paymentType: "cash",
-        totalPayment: "",
+        totalSqFeet: "",
+        pricePerSqFeet: "",
+        totalAmount: "",
         advancePayment: "",
         pendingAmount: "",
         bookingDate: today,
@@ -125,7 +135,11 @@ export default function Bookings() {
       setLoading(false);
     }
   };
-  
+
+  const formatINR = (value) => {
+    if (!value) return "";
+    return new Intl.NumberFormat("en-IN").format(value);
+  };
 
   /* ================= UI ================= */
   return (
@@ -188,8 +202,14 @@ export default function Bookings() {
           <option value="bank">Bank</option>
         </select>
 
-        <label>Total Payment:</label>
-        <input readOnly placeholder="Total Amount" value={form.totalPayment} />
+        <label>Total Sq.Ft:</label>
+        <input readOnly value={form.totalSqFeet} />
+
+        <label>Price per Sq.Ft:</label>
+        <input readOnly value={form.pricePerSqFeet} />
+
+        <label>Total Amount:</label>
+        <input readOnly value={form.totalAmount} />
 
         <label>Booking Amount</label>
         <input
@@ -197,17 +217,17 @@ export default function Bookings() {
           placeholder="Booking Amount"
           value={form.advancePayment}
           onChange={(e) => {
-            const adv = Number(e.target.value || 0);
+            const adv = Number(e.target.value);
             setForm((prev) => ({
               ...prev,
               advancePayment: adv,
-              pendingAmount: Number(prev.totalPayment || 0) - adv,
+              pendingAmount: Number(prev.totalAmount) - adv,
             }));
           }}
         />
 
-          <label>Pending Amount:</label>
-        <input readOnly placeholder="Pending Amount" value={form.pendingAmount} />
+        <label>Pending Amount:</label>
+        <input readOnly value={form.pendingAmount} />
 
         <button disabled={loading}>
           {loading ? "Booking..." : "Book House"}
@@ -224,7 +244,9 @@ export default function Bookings() {
             <th>House</th>
             <th>Customer</th>
             <th>Payment</th>
-            <th>Total</th>
+            <th>Total Sq.Ft</th>
+            <th>Price / Sq.Ft</th>
+            <th>Total Amount</th>
             <th>Booking Amount</th>
             <th>Pending</th>
             <th>Date</th>
@@ -242,21 +264,24 @@ export default function Bookings() {
               <td className={`badge ${b.paymentType}`}>
                 {b.paymentType.toUpperCase()}
               </td>
-              <td>₹{b.totalPayment}</td>
+              <td>{b.totalSqFeet}</td>
+              <td>₹{b.pricePerSqFeet}</td>
+              <td>₹{b.totalAmount}</td>
               <td>₹{b.advancePayment}</td>
-<td>
-  {Number(b.pendingAmount) === 0 ? (
-    <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
-  ) : (
-    <>₹{b.pendingAmount}</>
-  )}
-</td>              <td>{new Date(b.bookingDate).toLocaleDateString()}</td>
+              <td>
+                {Number(b.pendingAmount) === 0 ? (
+                  <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
+                ) : (
+                  <>₹{b.pendingAmount}</>
+                )}
+              </td>
+              <td>{new Date(b.bookingDate).toLocaleDateString()}</td>
               <td>
                 <button
                   className="history-btn"
                   onClick={() => navigate(`/booking-history/${b._id}`)}
                 >
-                  Booking History
+                  Payment History
                 </button>
               </td>
             </tr>
