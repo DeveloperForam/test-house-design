@@ -1,237 +1,220 @@
 /* ===============================
-   PROJECTS PAGE – PROFESSIONAL UI
+   GLOBAL PAGE
 ================================ */
-
 .projects-page {
-  padding: 24px;
-  background: #f8fafc;
+  padding: 20px;
+  background: #f5f7fb;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 /* ===============================
-   PRIMARY BUTTONS
+   BUTTONS
 ================================ */
-
 .btn-submit {
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: #ffffff;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
   border: none;
   padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .btn-submit:hover {
+  opacity: 0.9;
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
 }
 
 .btn-close {
   background: #e5e7eb;
-  color: #111827;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 10px 16px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-close:hover {
+  background: #d1d5db;
 }
 
 /* ===============================
-   TABLE CONTAINER
+   TABLE
 ================================ */
-
-.table-container {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-}
-
-.table-container table {
+table {
   width: 100%;
   border-collapse: collapse;
+  background: #fff;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
-/* ===============================
-   TABLE HEADER
-================================ */
+thead {
+  background: #4f46e5;
+  color: #fff;
+}
 
-.table-container thead th {
-  padding: 14px 12px;
+th,
+td {
+  padding: 14px 16px;
+  text-align: left;
   font-size: 14px;
-  font-weight: 600;
-  color: #1f2937;
-  background: #f1f5f9;
-  border-bottom: 1px solid #e5e7eb;
-  vertical-align: middle;
-  white-space: nowrap;
 }
 
-/* ===============================
-   TABLE BODY
-================================ */
-
-.table-container tbody td {
-  padding: 12px;
-  font-size: 14px;
-  color: #374151;
+tbody tr {
   border-bottom: 1px solid #e5e7eb;
-  vertical-align: middle;
 }
 
-.table-container tbody tr:hover {
+tbody tr:hover {
   background: #f9fafb;
 }
 
-/* ===============================
-   COLUMN ALIGNMENT
-================================ */
-
-/* No. */
-.table-container th:nth-child(1),
-.table-container td:nth-child(1) {
-  text-align: center;
-  width: 60px;
+tbody tr:last-child {
+  border-bottom: none;
 }
 
-/* Project Name */
-.table-container th:nth-child(2),
-.table-container td:nth-child(2) {
-  text-align: left;
-  font-weight: 500;
-}
-
-/* Type */
-.table-container th:nth-child(3),
-.table-container td:nth-child(3) {
-  text-align: center;
-  text-transform: capitalize;
-}
-
-/* Location */
-.table-container th:nth-child(4),
-.table-container td:nth-child(4) {
-  text-align: left;
-}
-
-/* Actions */
-.table-container th:nth-child(5),
-.table-container td:nth-child(5) {
-  text-align: center;
-}
-
-/* ===============================
-   ACTION BUTTONS
-================================ */
-
-.action-cell {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-.action-btn {
+td button {
+  margin-right: 8px;
   padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 500;
-  border-radius: 6px;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
-  transition: all 0.25s ease;
-  min-width: 60px;
+  font-size: 13px;
 }
 
-/* View */
-.action-btn.view {
-  background: #e0f2fe;
-  color: #0369a1;
+td button:first-child {
+  background: #f59e0b;
+  color: #fff;
 }
 
-.action-btn.view:hover {
-  background: #bae6fd;
-}
-
-/* Edit */
-.action-btn.edit {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.action-btn.edit:hover {
-  background: #bfdbfe;
-}
-
-/* Delete */
-.action-btn.delete {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.action-btn.delete:hover {
-  background: #fecaca;
+td button:last-child {
+  background: #ef4444;
+  color: #fff;
 }
 
 /* ===============================
-   MODAL
+   MODAL BACKDROP
 ================================ */
-
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 999;
+  align-items: center;
+  z-index: 1000;
 }
 
+/* ===============================
+   MODAL CONTENT
+================================ */
 .modal-content {
-  background: #ffffff;
-  width: 520px;
-  max-width: 95%;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 10px;
+  padding: 20px;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease;
 }
 
 .modal-content h2 {
   margin-bottom: 10px;
   font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
+  color: #111827;
 }
 
-.modal-content label {
+/* ===============================
+   FORM
+================================ */
+form label {
   display: block;
   margin-top: 12px;
-  font-size: 14px;
+  margin-bottom: 4px;
+  font-size: 13px;
   font-weight: 500;
+  color: #374151;
 }
 
-.modal-content input,
-.modal-content select {
+form input,
+form select {
   width: 100%;
-  padding: 10px 12px;
-  margin-top: 4px;
+  padding: 9px 10px;
   border-radius: 6px;
   border: 1px solid #d1d5db;
   font-size: 14px;
-}
-
-.modal-content input:focus,
-.modal-content select:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  transition: border 0.2s ease;
 }
 
+form input:focus,
+form select:focus {
+  border-color: #4f46e5;
+}
+
+form input[type="file"] {
+  padding: 6px;
+  background: #f9fafb;
+}
+
+/* ===============================
+   MODAL ACTIONS
+================================ */
 .modal-actions {
-  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 10px;
+  margin-top: 20px;
 }
+
+/* ===============================
+   SCROLLBAR (MODAL)
+================================ */
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #c7c9d1;
+  border-radius: 10px;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+  }
+}
+
+/* ===============================
+   ANIMATIONS
+================================ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

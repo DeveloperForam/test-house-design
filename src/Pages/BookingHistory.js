@@ -17,46 +17,46 @@ export default function BookingHistory() {
     paymentDetails: {},
   });
 
-  /* ================= LOAD DATA ================= */
   useEffect(() => {
-    loadBooking();
-    loadHistory();
-  }, []);
+    if (bookingId) {
+      loadBooking();
+      loadHistory();
+    }
+  }, [bookingId]);
 
-  /* ================= LOAD SINGLE BOOKING ================= */
+  // Load main booking info
   const loadBooking = async () => {
-    try {
-      const res = await api.get(`/payment-history/${bookingId}`);
-      setBooking(res.data.data);
-    } catch (err) {
-      console.error("Error loading booking:", err);
-      alert("❌ Failed to load booking details.");
-      setBooking(null);
-    }
+    const res = await api.get(`/payment-history/${bookingId}`);
+    setBooking(res.data.data);
   };
 
-  /* ================= LOAD PAYMENT HISTORY ================= */
+  // Load all payment history
   const loadHistory = async () => {
-    try {
-      const res = await api.get(`/payment-history?bookingId=${bookingId}`);
-      setHistory(Array.isArray(res.data.data) ? res.data.data : []);
-    } catch (err) {
-      console.error("Error loading payment history:", err);
-      setHistory([]);
-    }
+    const res = await api.get(`/payment-history?bookingId=${bookingId}`);
+    setHistory(Array.isArray(res.data.data) ? res.data.data : []);
   };
 
-  /* ================= CALCULATIONS ================= */
-  const totalAmount = booking?.totalAmount || 0;
-  const advancePayment = booking?.advancePayment || 0;
-  const pendingAmount = booking?.pendingAmount || 0;
+  // Calculate current pending amount
+  const getCurrentPending = () => {
+    if (!booking) return 0;
+    const totalPaid =
+      booking.advancePayment +
+      history.reduce((sum, h) => sum + Number(h.amountReceived), 0);
+    const pending = booking.totalAmount - totalPaid;
+    return pending < 0 ? 0 : pending;
+  };
 
-  /* ================= ADD PAYMENT ================= */
+  const currentPending = getCurrentPending();
+
+  // Add a new payment
   const addPayment = async (e) => {
     e.preventDefault();
-    if (!form.amountReceived || pendingAmount <= 0) return;
+
+    if (Number(form.amountReceived) > currentPending)
+      return alert("Amount exceeds pending");
 
     setLoading(true);
+
     try {
       await api.post("/payment-history/add-payment", {
         bookingId,
@@ -66,8 +66,7 @@ export default function BookingHistory() {
         paymentReceivedDate: form.paymentReceivedDate,
       });
 
-      alert("✅ Payment Added");
-
+      // Reset form
       setForm({
         amountReceived: "",
         paymentMethod: "cash",
@@ -75,60 +74,60 @@ export default function BookingHistory() {
         paymentDetails: {},
       });
 
-      loadHistory();
-      loadBooking();
-    } catch (err) {
-      console.error(err);
-      alert(err.response?.data?.error || "❌ Payment Failed");
+      // Reload data
+      await loadHistory();
+      await loadBooking();
     } finally {
       setLoading(false);
     }
   };
 
-  const formatINR = (value) => {
-    if (value === null || value === undefined || value === "") return "";
-    return new Intl.NumberFormat("en-IN").format(value);
-  };
+  // Format number as INR
+  const formatINR = (v) => new Intl.NumberFormat("en-IN").format(v || 0);
 
-  /* ================= UI ================= */
   return (
     <div className="booking-container">
       <h2 className="page-title">Booking Payment History</h2>
 
       {booking && (
         <div className="summary-box">
-          <div><b>Project:</b> {booking.projectName || "-"}</div>
-          <div><b>House Number:</b> {booking.houseNumber}</div>
-          <div><b>Total Amount:</b> ₹{formatINR(totalAmount)}</div>
-          <div><b>Booking Amount:</b> ₹{formatINR(advancePayment)}</div>
+          <div><b>House:</b> {booking.houseNumber}</div>
+          <div><b>Total Amount:</b> ₹{formatINR(booking.totalAmount)}</div>
+          <div><b>Advance Amount:</b> ₹{formatINR(booking.advancePayment)}</div>
+
           <div>
             <b>Status:</b>{" "}
-            {pendingAmount === 0 ? (
-              <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
+            {currentPending <= 0 ? (
+              <span style={{ color: "green", fontWeight: "bold" }}>
+                SOLD
+              </span>
             ) : (
               <span style={{ color: "red", fontWeight: "bold" }}>
-                ₹{formatINR(pendingAmount)} Pending
+                ₹{formatINR(currentPending)} Pending
               </span>
             )}
           </div>
         </div>
       )}
 
-      {/* ================= PAYMENT FORM ================= */}
-      {pendingAmount > 0 && (
+      {currentPending > 0 && (
         <form onSubmit={addPayment} className="booking-form">
           <input
             required
             type="number"
+            max={currentPending}
             placeholder="Amount Received"
             value={form.amountReceived}
-            onChange={(e) => setForm({ ...form, amountReceived: e.target.value })}
-            max={pendingAmount}
+            onChange={(e) =>
+              setForm({ ...form, amountReceived: e.target.value })
+            }
           />
 
           <select
             value={form.paymentMethod}
-            onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, paymentMethod: e.target.value })
+            }
           >
             <option value="cash">Cash</option>
             <option value="upi">UPI</option>
@@ -137,113 +136,62 @@ export default function BookingHistory() {
             <option value="card">Card</option>
           </select>
 
-          {/* PAYMENT DETAILS */}
-          {form.paymentMethod === "upi" && (
-            <input
-              placeholder="UPI Transaction ID"
-              minLength={12}
-              maxLength={18}
-              onChange={(e) =>
-                setForm({ ...form, paymentDetails: { upiTxnId: e.target.value } })
-              }
-            />
-          )}
-
-          {form.paymentMethod === "bank" && (
-            <>
-              <input
-                placeholder="Bank Name"
-                value={form.paymentDetails?.bankName || ""}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    paymentDetails: { ...form.paymentDetails, bankName: e.target.value },
-                  })
-                }
-              />
-              <input
-                placeholder="Account Number"
-                value={form.paymentDetails?.accountNo || ""}
-                minLength={14}
-                maxLength={18}
-                onChange={(e) =>
-                  setForm({
-                    ...form,
-                    paymentDetails: { ...form.paymentDetails, accountNo: e.target.value },
-                  })
-                }
-              />
-            </>
-          )}
-
-          {form.paymentMethod === "cheque" && (
-            <input
-              placeholder="Cheque Number"
-              onChange={(e) =>
-                setForm({ ...form, paymentDetails: { chequeNo: e.target.value } })
-              }
-            />
-          )}
-
-          {form.paymentMethod === "card" && (
-            <input
-              placeholder="Last 4 digits"
-              maxLength={4}
-              onChange={(e) =>
-                setForm({ ...form, paymentDetails: { last4Digits: e.target.value } })
-              }
-            />
-          )}
-
           <input
             required
             type="date"
             value={form.paymentReceivedDate}
-            onChange={(e) => setForm({ ...form, paymentReceivedDate: e.target.value })}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                paymentReceivedDate: e.target.value,
+              })
+            }
           />
 
-          <button disabled={loading}>{loading ? "Saving..." : "Add Payment"}</button>
+          <button disabled={loading}>
+            {loading ? "Saving..." : "Add Payment"}
+          </button>
         </form>
       )}
 
-      {/* ================= PAYMENT HISTORY TABLE ================= */}
       <table>
         <thead>
           <tr>
             <th>Date</th>
             <th>Method</th>
             <th>Amount</th>
-            <th>Pending Payment</th>
+            <th>Pending</th>
           </tr>
         </thead>
-
         <tbody>
           {history.length === 0 ? (
             <tr>
               <td colSpan="4">No payments yet</td>
             </tr>
           ) : (
-            history.map((h, index) => {
-              const paidTillNow = history
-                .slice(0, index + 1)
-                .reduce((sum, p) => sum + Number(p.amountReceived || 0), 0);
-              const pendingAfter = totalAmount - advancePayment - paidTillNow;
+            (() => {
+              // Calculate pending after each payment
+              let runningPending = booking.totalAmount - booking.advancePayment;
+              return history.map((h) => {
+                runningPending -= h.amountReceived;
+                if (runningPending < 0) runningPending = 0;
 
-              return (
-                <tr key={h._id}>
-                  <td>{new Date(h.paymentReceivedDate).toLocaleDateString()}</td>
-                  <td>{h.paymentMethod.toUpperCase()}</td>
-                  <td>₹{h.amountReceived}</td>
-                  <td>
-                    {pendingAfter === 0 ? (
-                      <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
-                    ) : (
-                      <>₹{formatINR(pendingAfter)}</>
-                    )}
-                  </td>
-                </tr>
-              );
-            })
+                return (
+                  <tr key={h._id}>
+                    <td>{new Date(h.paymentReceivedDate).toLocaleDateString()}</td>
+                    <td>{h.paymentMethod.toUpperCase()}</td>
+                    <td>₹{formatINR(h.amountReceived)}</td>
+                    <td>
+                      {runningPending <= 0 ? (
+                        <span style={{ color: "green", fontWeight: "bold" }}>SOLD</span>
+                      ) : (
+                        <>₹{formatINR(runningPending)}</>
+                      )}
+                    </td>
+                  </tr>
+                );
+              });
+            })()
           )}
         </tbody>
       </table>
